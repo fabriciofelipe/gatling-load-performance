@@ -1,4 +1,4 @@
-package org.baeldung
+package br.com.ig
 
 import io.gatling.app.Gatling
 import io.gatling.core.config.GatlingPropertiesBuilder

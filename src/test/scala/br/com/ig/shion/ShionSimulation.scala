@@ -1,4 +1,4 @@
-package org.baeldung.sim
+package br.com.ig.shion
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
@@ -8,44 +8,39 @@ import org.slf4j.LoggerFactory
 
 import scala.util.Random
 
-class RecordedSimulation extends Simulation {
+class ShionSimulation extends Simulation {
   val logger = LoggerFactory.getLogger(classOf[Nothing])
 
   val httpProtocol = http
-    // .baseURL("http://localhost:8080")
-    .baseURL("http://34.252.82.0:8080")
-    .acceptHeader("application/hal+json")
+    .baseURL("http://localhost:8080")
+ //   .acceptHeader("application/hal+json")
 
   val feeder = Iterator.continually(Map("newIsbn" -> (newIsbn()), "newTitle" -> (newTitle())))
 
   val scn = scenario("RecordedSimulation").feed(feeder)
     .exec(
       http("get_root")
-        .get("/")
+        .get("/planets")
+        .header("Content-Type", "application/json")
         .check(status.is(200))
     )
 
-    .exec(http("get_books")
-      .get("/books")
-      .check(status.is(200))
-    )
+//    .exec(
+//      http("create_book")
+//        .post("/planet")
+//        .notSilent
+//        .header("Content-Type", "application/json")
+//        .body(StringBody("{ \"title\": \"${newTitle}\", \"isbn\": ${newIsbn} }"))
+//        .check(status.is(201))
+//    )
 
-    .exec(
-      http("create_book")
-        .post("/books")
-        .notSilent
-        .header("Content-Type", "application/json")
-        .body(StringBody("{ \"title\": \"${newTitle}\", \"isbn\": ${newIsbn} }"))
-        .check(status.is(201))
-    )
-
-    .exec(http("get_books_paginated")
-      .get("/books?page=1&size=20")
-      .check(status.is(200))
-    )
+//    .exec(http("get_books_paginated")
+//      .get("/planet?name=terra")
+//      .check(status.is(200))
+//    )
 
   // setUp(scn.inject(atOnceUsers(100))).protocols(httpProtocol)
-  setUp(scn.inject(constantUsersPerSec(60) during (30))).protocols(httpProtocol)
+  setUp(scn.inject(constantUsersPerSec(60)during (30))).protocols(httpProtocol)
 
   //
 
