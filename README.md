@@ -1,6 +1,6 @@
 # gatling-load-performance
 
-Para rodar basta execuatr no console: 
+Para rodar basta execuatr no console: \
 mvn clean install
 
 
