@@ -18,12 +18,20 @@ class ShionSimulation extends Simulation {
   val feeder = Iterator.continually(Map("newIsbn" -> (newIsbn()), "newTitle" -> (newTitle())))
 
   val scn = scenario("RecordedSimulation").feed(feeder)
+ //   .exec(
+//      http("get_root")
+ //       .get("/planets")
+ //       .header("Content-Type", "application/json")
+ //       .check(status.is(200))
+ //   )
+  
     .exec(
-      http("get_root")
-        .get("/planets")
-        .header("Content-Type", "application/json")
-        .check(status.is(200))
-    )
+    http("get_currency_conversion")
+      .get("/currencyConversion?from=BRL&to=USD&amount=100")
+      .header("Content-Type", "application/json")
+      .check(status.is(200))
+  )
+
 
 //    .exec(
 //      http("create_book")
@@ -40,7 +48,7 @@ class ShionSimulation extends Simulation {
 //    )
 
   // setUp(scn.inject(atOnceUsers(100))).protocols(httpProtocol)
-  setUp(scn.inject(constantUsersPerSec(60)during (30))).protocols(httpProtocol)
+  setUp(scn.inject(constantUsersPerSec(1000)during (30))).protocols(httpProtocol)
 
   //
 
